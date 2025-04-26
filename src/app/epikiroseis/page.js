@@ -1,0 +1,254 @@
+"use client";
+import React, { useEffect, useState } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Line,
+  ComposedChart,
+  Area,
+  Legend,
+  ResponsiveContainer,
+  CartesianGrid,
+} from "recharts";
+
+const EpikiroseisCharts = () => {
+  const [filteredData, setFilteredData] = useState([]);
+  const [startDate, setStartDate] = useState("2019-01-01");
+  const [endDate, setEndDate] = useState("2019-01-30");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [months, setMonths] = useState([]);
+  const [visibleBars, setVisibleBars] = useState({
+    ΟΣΥ: true,
+    ΣΤΑΣΥ: true,
+    ΤΡΑΜ: true,
+    ΚΤΕΛ: true,
+  });
+
+  useEffect(() => {
+    load();
+    generateMonths(startDate, endDate);
+  }, []);
+
+  const generateMonths = (start, end) => {
+    const startD = new Date(start);
+    const endD = new Date(end);
+    const result = [];
+
+    startD.setDate(1);
+
+    while (startD <= endD) {
+      const year = startD.getFullYear();
+      const month = String(startD.getMonth() + 1).padStart(2, "0");
+      result.push(`${year}-${month}`);
+      startD.setMonth(startD.getMonth() + 1);
+    }
+    setMonths(result);
+  };
+
+  const load = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/csv_json/_epikiroseis_062023.json");
+      if (!response.ok) throw new Error("JSON not found");
+      const json = await response.json();
+      const entries = sortByDate(Object.entries(json));
+
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      const filtered = entries.filter(([dateStr]) => {
+        const [day, month, year] = dateStr.split("/");
+        const current = new Date(`${year}-${month}-${day}`);
+        return current >= start && current <= end;
+      });
+
+      setFilteredData(filtered);
+    } catch (err) {
+      setError("Failed to load data.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const sortByDate = (entries) => {
+    return entries.sort((a, b) => {
+      const dateA = new Date(a[0].split("/").reverse().join("-"));
+      const dateB = new Date(b[0].split("/").reverse().join("-"));
+      return dateA - dateB;
+    });
+  };
+
+  const handleFilter = () => {
+    if (!startDate || !endDate) return;
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    if (end <= start) {
+      alert("The end date must be after the start date.");
+      return;
+    }
+
+    load();
+  };
+
+  const chartData = filteredData.map(([date, values]) => ({
+    date,
+    ΟΣΥ: values["ΟΣΥ"] ?? 0,
+    ΣΤΑΣΥ: values["ΣΤΑΣΥ"] ?? 0,
+    ΤΡΑΜ: values["ΤΡΑΜ"] ?? 0,
+    ΚΤΕΛ: values["ΚΤΕΛ"] ?? 0,
+  }));
+
+  const handleCheckboxChange = (key) => {
+    setVisibleBars((prev) => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
+  };
+
+  const isLongRange = () => {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffInMs = end - start;
+    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+    return diffInDays > 60;
+  };
+
+  return (
+    <div className="min-h-screen md:p-6 flex flex-col gap-8">
+      {/* Title */}
+      <h1 className="text-3xl font-bold text-center text-gray-800">
+        Επικυρώσεις (2019 - 2023)
+      </h1>
+
+      {/* Filter */}
+      <div className="flex flex-wrap gap-4 justify-center items-end">
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-600 mb-1">Από</label>
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-2 text-sm"
+          />
+        </div>
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-600 mb-1">Έως</label>
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            className="border border-gray-300 rounded px-3 py-2 text-sm"
+          />
+        </div>
+        <button
+          onClick={handleFilter}
+          className="bg-blue-600 text-white rounded px-4 py-2 text-sm hover:bg-blue-700 transition"
+        >
+          Εφαρμογή Φίλτρου
+        </button>
+      </div>
+
+      {/* Loading/Error */}
+      {loading && (
+        <p className="text-center text-gray-500">Φόρτωση δεδομένων...</p>
+      )}
+      {error && <p className="text-center text-red-500">{error}</p>}
+
+      {/* Chart & Options */}
+      {!loading && !error && (
+        <div className="flex flex-wrap md:flex-row flex-col justify-center items-center gap-4">
+          {/* Options */}
+          <div className="flex flex-col p-4 bg-white rounded-xl shadow-md h-fit">
+            <h2 className="text-lg font-semibold text-gray-700">
+              Επιλογή Δεδομένων
+            </h2>
+            {Object.keys(visibleBars).map((key) => (
+              <label
+                key={key}
+                className="flex items-center gap-2 text-gray-600"
+              >
+                <input
+                  type="checkbox"
+                  checked={visibleBars[key]}
+                  onChange={() => handleCheckboxChange(key)}
+                  className="accent-blue-600"
+                />
+                <span className="text-sm">{key}</span>
+              </label>
+            ))}
+          </div>
+
+          {/* Chart */}
+          <div className="flex-1 h-[50vh] w-full bg-white rounded-xl shadow-md p-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart
+                data={chartData}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis tickFormatter={(v) => v.toLocaleString("el-GR")} />
+                <Tooltip formatter={(v) => v.toLocaleString("el-GR")} />
+                <Legend />
+                {!isLongRange() && visibleBars["ΟΣΥ"] && (
+                  <Bar dataKey="ΟΣΥ" fill="#60A5FA" />
+                )}
+                {!isLongRange() && visibleBars["ΣΤΑΣΥ"] && (
+                  <Bar dataKey="ΣΤΑΣΥ" fill="#34D399" />
+                )}
+                {!isLongRange() && visibleBars["ΤΡΑΜ"] && (
+                  <Bar dataKey="ΤΡΑΜ" fill="#FBBF24" />
+                )}
+                {!isLongRange() && visibleBars["ΚΤΕΛ"] && (
+                  <Bar dataKey="ΚΤΕΛ" fill="#F87171" />
+                )}
+                {isLongRange() && visibleBars["ΟΣΥ"] && (
+                  <Area
+                    dataKey="ΟΣΥ"
+                    type="natural"
+                    stroke="#60A5FA"
+                    fill="red"
+                  />
+                )}
+                {isLongRange() && visibleBars["ΣΤΑΣΥ"] && (
+                  <Area
+                    dataKey="ΣΤΑΣΥ"
+                    type="natural"
+                    stroke="#34D399"
+                    fill="#34D399"
+                  />
+                )}
+                {isLongRange() && visibleBars["ΤΡΑΜ"] && (
+                  <Area
+                    dataKey="ΤΡΑΜ"
+                    type="natural"
+                    stroke="#FBBF24"
+                    fill="#FBBF24"
+                  />
+                )}
+                {isLongRange() && visibleBars["ΚΤΕΛ"] && (
+                  <Area
+                    type="natural"
+                    dataKey="ΚΤΕΛ"
+                    fill="#684814"
+                    stroke="#684814"
+                  />
+                )}
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default EpikiroseisCharts;
