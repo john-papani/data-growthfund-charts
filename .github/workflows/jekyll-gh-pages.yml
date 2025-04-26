@@ -2,7 +2,7 @@ name: Deploy Next.js with GitHub Pages
 
 on:
   push:
-    branches: ["master"]
+    branches: ["main"] # Or "master" depending on your default branch
   workflow_dispatch:
 
 permissions:
@@ -21,14 +21,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      - name: Set up Node.js (version 18 or higher)
         uses: actions/setup-node@v3
         with:
-          node-version: "16" # or your preferred Node.js version
+          node-version: "18" # You can use '18', '19', or '20' based on your preference
 
       - name: Install dependencies
         run: |
-          npm install -force # install dependencies
+          npm install
           npm run build  # build Next.js project
           npm run export  # generate static files
 
