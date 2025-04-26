@@ -53,7 +53,7 @@ const EpikiroseisCharts = () => {
   const load = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/csv_json/_epikiroseis_062023.json");
+      const response = await fetch("./csv_json/_epikiroseis_062023.json");
       if (!response.ok) throw new Error("JSON not found");
       const json = await response.json();
       const entries = sortByDate(Object.entries(json));

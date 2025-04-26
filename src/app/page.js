@@ -6,14 +6,13 @@ import Image from "next/image";
 
 export default function HomePage() {
   const router = useRouter();
-
   return (
     <div className="min-h-[90vh] bg-gray-50 flex flex-col">
       <div className="flex flex-1 flex-col items-center justify-center p-6 text-center">
         <Image
           width={256}
           height={256}
-          src="/data_visualization.png" // Example, you can replace it
+          src={`./data_visualization.png`}
           alt="Data Visualization"
           className="w-64 h-64 mb-6"
         />

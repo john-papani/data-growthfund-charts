@@ -6,6 +6,9 @@ const nextConfig = {
   output: "export",
   basePath: isProd ? "/hcapdata-charts" : "",
   assetPrefix: isProd ? "/hcapdata-charts/" : "",
+  images: {
+    unoptimized: true,
+  },
 };
 
 export default nextConfig;
