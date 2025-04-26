@@ -30,7 +30,6 @@ jobs:
         run: |
           npm install
           npm run build  # build Next.js project
-          npm run export  # generate static files
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
