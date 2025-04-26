@@ -3,8 +3,6 @@ import React from "react";
 function Footer() {
   return (
     <footer className="text-center text-gray-400 text-sm p-4">
-      © 2025 HCAP Data Visualization. Powered by data.hcap.gr
-      <br />
       <p className="text-gray-500">
         John-papani &copy; 2025. All rights reserved.
       </p>
