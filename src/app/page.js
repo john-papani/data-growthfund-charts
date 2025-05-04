@@ -39,18 +39,19 @@ export default function HomePage() {
           >
             Επικυρώσεις (2019 - 2023)
           </button>
-          {/* <button
-            // onClick={() => router.push("/charts/investments")}
+
+          <button
+            onClick={() => router.push("/diktyopolisis")}
             className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-6 rounded-lg transition"
           >
-            Investments Charts
+            Δίκτυο Πώλησης (Χάρτης)
           </button>
           <button
-            // onClick={() => router.push("/charts/performance")}
+            onClick={() => router.push("/anelkistireshsap")}
             className="bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-6 rounded-lg transition"
           >
-            Performance Charts
-          </button> */}
+            Διευθυνσεις Ανελκυστήρων ΗΣΑΠ (Χάρτης)
+          </button>
         </div>
       </div>
     </div>
