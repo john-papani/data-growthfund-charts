@@ -1,27 +1,28 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-  BarChart,
   Bar,
   XAxis,
   YAxis,
   Tooltip,
-  Line,
   ComposedChart,
   Area,
   Legend,
   ResponsiveContainer,
   CartesianGrid,
 } from "recharts";
+import { useRouter } from "next/navigation";
+
+import RangeDates from "@/app/Components/EpikiroseisChartComponents/RangeDates";
 
 const EpikiroseisCharts = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [startDate, setStartDate] = useState("2019-01-01");
-  const [endDate, setEndDate] = useState("2019-01-30");
+  const [endDate, setEndDate] = useState("2019-01-15");
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [selectedMonth, setSelectedMonth] = useState("");
-  const [months, setMonths] = useState([]);
+
   const [visibleBars, setVisibleBars] = useState({
     ΟΣΥ: true,
     ΣΤΑΣΥ: true,
@@ -31,24 +32,27 @@ const EpikiroseisCharts = () => {
 
   useEffect(() => {
     load();
-    generateMonths(startDate, endDate);
   }, []);
 
-  const generateMonths = (start, end) => {
-    const startD = new Date(start);
-    const endD = new Date(end);
-    const result = [];
+  const router = useRouter();
+  const [isMobile, setIsMobile] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
-    startD.setDate(1);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setIsMobile(true);
+        setShowModal(true);
+      } else {
+        setIsMobile(false);
+        setShowModal(false);
+      }
+    };
 
-    while (startD <= endD) {
-      const year = startD.getFullYear();
-      const month = String(startD.getMonth() + 1).padStart(2, "0");
-      result.push(`${year}-${month}`);
-      startD.setMonth(startD.getMonth() + 1);
-    }
-    setMonths(result);
-  };
+    handleResize(); // Check on first load
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const load = async () => {
     setLoading(true);
@@ -123,38 +127,40 @@ const EpikiroseisCharts = () => {
 
   return (
     <div className="min-h-screen md:p-6 flex flex-col gap-8">
+      {showModal && (
+        <div className="fixed inset-0 bg-black/90 bg-opacity-10 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm w-full">
+            <h2 className="text-xl font-bold text-gray-800 mb-4">Συγγνώμη!</h2>
+            <p className="text-gray-600 mb-6">
+              Αυτή η σελίδα είναι διαθέσιμη μόνο σε υπολογιστή.
+            </p>
+            <button
+              onClick={() => router.push("/")}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+            >
+              Επιστροφή στην Αρχική
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Title */}
-      <h1 className="text-3xl font-bold text-center text-gray-800">
-        Επικυρώσεις (2019 - 2023)
+      <h1 className="text-3xl md:pt-0 pt-5 font-bold text-center text-gray-800">
+        Επικυρώσεις Ειστηρίων(2019 - 2023)
       </h1>
+      <p className="text-gray-600 text-center w-[90%] md:w-[70%] mx-auto">
+        Η εφαρμογή αυτή παρέχει πληροφορίες σχετικά με τις επικυρώσεις των
+        ειστηρίων του δικτύου συγκοινωνιών της Αθήνας. 
+        </p>
 
       {/* Filter */}
-      <div className="flex flex-wrap gap-4 justify-center items-end">
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-600 mb-1">Από</label>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 text-sm"
-          />
-        </div>
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-600 mb-1">Έως</label>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 text-sm"
-          />
-        </div>
-        <button
-          onClick={handleFilter}
-          className="bg-blue-600 text-white rounded px-4 py-2 text-sm hover:bg-blue-700 transition"
-        >
-          Εφαρμογή Φίλτρου
-        </button>
-      </div>
+      <RangeDates
+        startDate={startDate}
+        endDate={endDate}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+        handleFilter={handleFilter}
+      />
 
       {/* Loading/Error */}
       {loading && (
@@ -188,6 +194,14 @@ const EpikiroseisCharts = () => {
 
           {/* Chart */}
           <div className="flex-1 h-[50vh] w-full bg-white rounded-xl shadow-md p-4">
+            {chartData[0] && (
+              <h2 className="text-lg font-semibold text-gray-700 mb-4">
+                {isLongRange()
+                  ? "Επικυρώσεις ανά μήνα (2019 - 2023)"
+                  : `Επικυρώσεις ανά ημέρα (${startDate} - ${endDate})`}
+              </h2>
+            )}
+
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart
                 data={chartData}
@@ -195,9 +209,13 @@ const EpikiroseisCharts = () => {
               >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
-                <YAxis tickFormatter={(v) => v.toLocaleString("el-GR")} />
+                <YAxis
+                  tickFormatter={(v) => v.toLocaleString("el-GR")}
+                  tick={{ fontSize: 10 }}
+                />
                 <Tooltip formatter={(v) => v.toLocaleString("el-GR")} />
                 <Legend />
+
                 {!isLongRange() && visibleBars["ΟΣΥ"] && (
                   <Bar dataKey="ΟΣΥ" fill="#60A5FA" />
                 )}
