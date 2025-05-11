@@ -146,12 +146,24 @@ const EpikiroseisCharts = () => {
 
       {/* Title */}
       <h1 className="text-3xl md:pt-0 pt-5 font-bold text-center text-gray-800">
-        Επικυρώσεις Ειστηρίων(2019 - 2023)
+        Επικυρώσεις Ειστηρίων (2019 - 2023)
       </h1>
-      <p className="text-gray-600 text-center w-[90%] md:w-[70%] mx-auto">
-        Η εφαρμογή αυτή παρέχει πληροφορίες σχετικά με τις επικυρώσεις των
-        ειστηρίων του δικτύου συγκοινωνιών της Αθήνας. 
+      <div className="flex flex-col justify-center items-center gap-2">
+        <p className="text-gray-600 text-center w-[90%] md:w-[70%] mx-auto">
+          Η εφαρμογή αυτή παρέχει πληροφορίες σχετικά με τις επικυρώσεις των
+          ειστηρίων του δικτύου συγκοινωνιών της Αθήνας.
         </p>
+        <p className="text-gray-600 text-center w-[90%] md:w-[70%] mx-auto">
+          Μπορείτε να δείτε τον πίνακα με τα αναλυτικά δεδομένα επικυρώσεων{" "}
+          <a
+            href="/epikiroseistable"
+            className="text-blue-600 hover:underline font-medium"
+          >
+            εδώ
+          </a>
+          .
+        </p>
+      </div>
 
       {/* Filter */}
       <RangeDates
@@ -194,13 +206,13 @@ const EpikiroseisCharts = () => {
 
           {/* Chart */}
           <div className="flex-1 h-[50vh] w-full bg-white rounded-xl shadow-md p-4">
-            {chartData[0] && (
+            {/* {chartData[0] && (
               <h2 className="text-lg font-semibold text-gray-700 mb-4">
                 {isLongRange()
                   ? "Επικυρώσεις ανά μήνα (2019 - 2023)"
                   : `Επικυρώσεις ανά ημέρα (${startDate} - ${endDate})`}
               </h2>
-            )}
+            )} */}
 
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart

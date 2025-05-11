@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-
+import RangeDates from "@/app/Components/EpikiroseisChartComponents/RangeDates";
 const EpikiroseisTable = () => {
   const [data, setData] = useState({});
   const [filteredData, setFilteredData] = useState([]);
@@ -8,6 +8,7 @@ const EpikiroseisTable = () => {
   const [endDate, setEndDate] = useState("2023-06-30");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [selectedRow, setSelectedRow] = useState(null);
 
   const load = async () => {
     setLoading(true);
@@ -60,56 +61,25 @@ const EpikiroseisTable = () => {
 
   return (
     <div className="p-4 space-y-4">
-      <h2 className="text-2xl font-bold text-center text-green-200">
-        Επικυρώσεις 1/1/2019 - 30/6/2023
-      </h2>
+      <p className="text-3xl md:pt-0 pt-5 pb-5 font-bold text-center text-gray-800">
+        Επικυρώσεις Ειστηρίων(2019 - 2023)
+      </p>
 
-      {/* Date Filter */}
-      <div className="flex items-center gap-4 flex-wrap">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Από</label>
-          <input
-            type="date"
-            value={startDate}
-            min="2019-01-01"
-            max="2023-06-30"
-            onChange={(e) => {
-              const newStartDate = e.target.value;
-              setStartDate(newStartDate);
-              if (newStartDate > endDate) {
-                setEndDate(newStartDate); // Ensure endDate is not before startDate
-              }
-            }}
-            className="appearance-none border px-3 py-2 rounded bg-white text-gray-800"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700">Έως</label>
-          <input
-            type="date"
-            value={endDate}
-            min={startDate}
-            max="2023-06-30"
-            onChange={(e) => setEndDate(e.target.value)}
-            className="appearance-none border px-3 py-2 rounded bg-white text-gray-800"
-          />
-        </div>
-        <div className="flex justify-center mt-4">
-          <button
-            onClick={handleFilter}
-            className="mt-5 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded shadow"
-          >
-            Φίλτρο
-          </button>
-        </div>
-      </div>
+      {/* Filter */}
+      <RangeDates
+        startDate={startDate}
+        endDate={endDate}
+        setStartDate={setStartDate}
+        setEndDate={setEndDate}
+        handleFilter={handleFilter}
+      />
 
       {/* Table */}
       {loading && <p className="text-gray-600">Loading...</p>}
       {error && <p className="text-red-600">{error}</p>}
 
       {!loading && !error && (
-        <div className="max-h-[500px] overflow-auto border border-gray-300 rounded">
+        <div className="max-h-[60vh] overflow-auto border mt-10 border-gray-300 rounded">
           <table className="min-w-full text-sm text-center border-collapse">
             <thead className="bg-gray-100 sticky top-0 z-10">
               <tr>
@@ -124,24 +94,39 @@ const EpikiroseisTable = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredData.map(([date, values], index) => (
-                <tr
-                  key={date}
-                  className={index % 2 === 0 ? "bg-white" : "bg-gray-200"}
-                >
-                  <td className="px-4 py-2 border-b whitespace-nowrap text-red-500">
-                    {date}
-                  </td>
-                  {columns.slice(1).map((key) => (
+              {filteredData.map(([date, values], index) => {
+                const isEven = index % 2 === 0;
+                const isSelected = selectedRow === date;
+                const rowBg = isSelected
+                  ? "bg-yellow-100 font-bold"
+                  : isEven
+                  ? "bg-white"
+                  : "bg-gray-300";
+                const textColor = isEven ? "text-gray-800" : "text-gray-700";
+
+                return (
+                  <tr
+                    key={date}
+                    className={rowBg}
+                    onClick={() => setSelectedRow(date)}
+                    style={{ cursor: "pointer" }}
+                  >
                     <td
-                      key={key}
-                      className="px-4 py-2 border-b text-center text-red-500"
+                      className={`px-4 py-2 border-b border-gray-300 whitespace-nowrap ${textColor}`}
                     >
-                      {values[key] ?? ""}
+                      {date}
                     </td>
-                  ))}
-                </tr>
-              ))}
+                    {columns.slice(1).map((key) => (
+                      <td
+                        key={key}
+                        className={`px-4 py-2 border-b border-gray-300 text-center ${textColor}`}
+                      >
+                        {values[key] ?? ""}
+                      </td>
+                    ))}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
