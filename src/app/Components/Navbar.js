@@ -19,12 +19,12 @@ function Navbar() {
         >
           About
         </button>
-        <button
+        {/* <button
           onClick={() => router.push("/contact")}
           className="text-gray-600 hover:text-blue-600 font-medium cursor-pointer transition"
         >
           Contact
-        </button>
+        </button> */}
       </nav>
     </header>
   );
