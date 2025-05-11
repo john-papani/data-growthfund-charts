@@ -22,12 +22,12 @@ export default function HomePage() {
         <p className="text-gray-600 max-w-xl mb-8">
           Dive into visual insights powered by the official{" "}
           <a
-            href="https://data.hcap.gr/"
+            href="https://data.growthfund.gr/"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-600 italic hover:underline"
           >
-            data.hcap.gr
+            data.growthfund.gr
           </a>{" "}
           platform. Choose a category to explore statistics in a clean and
           interactive way.
