@@ -28,7 +28,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          npm install
+          npm install -force
           npm run build  # build Next.js project
 
       - name: Upload artifact
