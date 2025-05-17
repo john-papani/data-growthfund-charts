@@ -56,7 +56,7 @@ const MapWithMarkers = () => {
     const load = async () => {
       setLoading(true);
       try {
-        const res = await fetch("/csv_json/diktyo_polisis_active.json");
+        const res = await fetch( `${process.env.NEXT_PUBLIC_BASE_PATH}/csv_json/diktyo_polisis_active.json`);
         if (!res.ok) throw new Error("Failed to fetch data");
         const json = await res.json();
         const cleaned = json.map((entry) => ({

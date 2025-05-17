@@ -40,12 +40,23 @@ const EpikiroseisCharts = () => {
   const load = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/csv_json/_epikiroseis_062023.json");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/csv_json/_epikiroseis_062023.json`
+      );
+
       if (!response.ok) throw new Error("JSON not found");
       const json = await response.json();
       const entries = sortByDate(Object.entries(json));
       setFilteredData(entries);
-      setMonths([...new Set(entries.map(([date]) => date.split("/").reverse().slice(0, 2).join("-")))].sort());
+      setMonths(
+        [
+          ...new Set(
+            entries.map(([date]) =>
+              date.split("/").reverse().slice(0, 2).join("-")
+            )
+          ),
+        ].sort()
+      );
     } catch (err) {
       setError("Failed to load data.");
       console.error("Error fetching JSON:", err);
@@ -98,7 +109,12 @@ const EpikiroseisCharts = () => {
   };
 
   const monthlySummary = groupByMonth(filteredData);
-  const monthData = monthlySummary[selectedMonth] || { ΟΣΥ: 0, ΣΤΑΣΥ: 0, ΤΡΑΜ: 0, ΚΤΕΛ: 0 };
+  const monthData = monthlySummary[selectedMonth] || {
+    ΟΣΥ: 0,
+    ΣΤΑΣΥ: 0,
+    ΤΡΑΜ: 0,
+    ΚΤΕΛ: 0,
+  };
 
   const lineChartData = {
     labels: filteredData.map(([date]) => date),
@@ -143,7 +159,12 @@ const EpikiroseisCharts = () => {
     datasets: [
       {
         label: `Συνολικά (${selectedMonth || "Select Month"})`,
-        data: [monthData["ΟΣΥ"], monthData["ΣΤΑΣΥ"], monthData["ΤΡΑΜ"], monthData["ΚΤΕΛ"]],
+        data: [
+          monthData["ΟΣΥ"],
+          monthData["ΣΤΑΣΥ"],
+          monthData["ΤΡΑΜ"],
+          monthData["ΚΤΕΛ"],
+        ],
         backgroundColor: ["#FF5733", "#33FF57", "#3357FF", "#F0E130"],
       },
     ],

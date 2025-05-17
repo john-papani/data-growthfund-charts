@@ -38,7 +38,7 @@ const MapWithMarkers = () => {
     setError(null);
 
     try {
-      const response = await fetch("/csv_json/dieythinseis_anelkistires.json");
+      const response = await fetch( `${process.env.NEXT_PUBLIC_BASE_PATH}/csv_json/dieythinseis_anelkistires.json`);
       if (!response.ok) throw new Error("JSON not found");
 
       const json = await response.json();
