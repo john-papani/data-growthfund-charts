@@ -36,8 +36,6 @@ const EpikiroseisCharts = () => {
 
   const router = useRouter();
 
-
-
   const load = async () => {
     setLoading(true);
     try {
@@ -138,8 +136,9 @@ const EpikiroseisCharts = () => {
         <p className="text-gray-600 text-center w-[90%] md:w-[70%] mx-auto">
           Μπορείτε να δείτε τον πίνακα με τα αναλυτικά δεδομένα επικυρώσεων{" "}
           <a
-            href="/epikiroseistable"
-            className="text-blue-600 hover:underline font-medium"
+            // href="/hcapdata-charts/epikiroseistable"
+            onClick={() => router.push("/epikiroseistable")}
+            className="text-blue-600 hover:underline hover:cursor-pointer font-medium"
           >
             εδώ
           </a>
