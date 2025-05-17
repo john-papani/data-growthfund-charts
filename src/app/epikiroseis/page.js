@@ -35,24 +35,8 @@ const EpikiroseisCharts = () => {
   }, []);
 
   const router = useRouter();
-  const [isMobile, setIsMobile] = useState(false);
-  const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth <= 768) {
-        setIsMobile(true);
-        setShowModal(true);
-      } else {
-        setIsMobile(false);
-        setShowModal(false);
-      }
-    };
 
-    handleResize(); // Check on first load
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   const load = async () => {
     setLoading(true);
@@ -127,22 +111,20 @@ const EpikiroseisCharts = () => {
 
   return (
     <div className="min-h-screen md:p-6 flex flex-col gap-8">
-      {showModal && (
-        <div className="fixed inset-0 bg-black/90 bg-opacity-10 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm w-full">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">Συγγνώμη!</h2>
-            <p className="text-gray-600 mb-6">
-              Αυτή η σελίδα είναι διαθέσιμη μόνο σε υπολογιστή.
-            </p>
-            <button
-              onClick={() => router.push("/")}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
-            >
-              Επιστροφή στην Αρχική
-            </button>
-          </div>
+      <div className="fixed inset-0 bg-black/90 bg-opacity-10 flex justify-center items-center z-50 md:hidden">
+        <div className="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm w-full">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Συγγνώμη!</h2>
+          <p className="text-gray-600 mb-6">
+            Αυτή η σελίδα είναι διαθέσιμη μόνο σε υπολογιστή.
+          </p>
+          <button
+            onClick={() => router.push("/")}
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Επιστροφή στην Αρχική
+          </button>
         </div>
-      )}
+      </div>
 
       {/* Title */}
       <h1 className="text-3xl md:pt-0 pt-5 font-bold text-center text-gray-800">
