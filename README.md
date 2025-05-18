@@ -1,6 +1,9 @@
 # Data Visualization for HCAP
 
+
 This project is a web application that provides interactive data visualizations based on the statistics from the official data.hcap.gr platform. The goal is to offer users an engaging way to explore various datasets related to employment, investments, and performance.
+
+![image](https://github.com/user-attachments/assets/d4efe7c6-070b-4f56-be96-ba11548c1e95)
 
 ## Features
 
