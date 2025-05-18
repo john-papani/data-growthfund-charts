@@ -1,20 +1,22 @@
 # Data Visualization for HCAP
 
-
 This project is a web application that provides interactive data visualizations based on the statistics from the official data.hcap.gr platform. The goal is to offer users an engaging way to explore various datasets related to employment, investments, and performance.
 
-![image](https://github.com/user-attachments/assets/d4efe7c6-070b-4f56-be96-ba11548c1e95)
+<div style="display: flex; gap: 10px;">
+  <img src="./public/screenshoot1.png" alt="Screenshot 1" style="width: calc(50% - 5px);" />
+  <img src="./public/screenshoot2.png" alt="Screenshot 2" style="width: calc(50% - 5px);" />
+</div>
 
 ## Features
 
-* **Interactive Charts**: View data in the form of bar charts, line charts, and more.
-* **User-Friendly Interface**: Clean, responsive design for easy navigation and data exploration.
+- **Interactive Charts**: View data in the form of bar charts, line charts, and more.
+- **User-Friendly Interface**: Clean, responsive design for easy navigation and data exploration.
 
 ## Technologies Used
 
-* **Next.js**: A React-based framework for server-side rendering and static site generation.
-* **Tailwind CSS**: A utility-first CSS framework for styling the app.
-* **Recharts**: A charting library for rendering interactive data charts.
+- **Next.js**: A React-based framework for server-side rendering and static site generation.
+- **Tailwind CSS**: A utility-first CSS framework for styling the app.
+- **Recharts**: A charting library for rendering interactive data charts.
 
 ## Data Source
 
