@@ -32,7 +32,7 @@ export default function HomePage() {
           platform. Choose a category to explore statistics in a clean and
           interactive way.
         </p>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap  text-center justify-center gap-4">
           <button
             onClick={() => router.push("/epikiroseis")}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition"
