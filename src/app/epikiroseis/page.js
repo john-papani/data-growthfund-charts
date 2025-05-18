@@ -14,6 +14,7 @@ import {
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import RangeDates from "@/app/Components/EpikiroseisChartComponents/RangeDates";
+import Spinner from "../Components/Spinner";
 
 const EpikiroseisCharts = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -158,9 +159,7 @@ const EpikiroseisCharts = () => {
       />
 
       {/* Loading/Error */}
-      {loading && (
-        <p className="text-center text-gray-500">Φόρτωση δεδομένων...</p>
-      )}
+      {loading && <Spinner />}
       {error && <p className="text-center text-red-500">{error}</p>}
 
       {/* Chart & Options */}

@@ -12,6 +12,7 @@ import {
   Legend,
   ArcElement,
 } from "chart.js";
+import Spinner from "./Spinner";
 
 ChartJS.register(
   CategoryScale,
@@ -222,7 +223,7 @@ const EpikiroseisCharts = () => {
         </select>
       </div>
 
-      {loading && <p className="text-gray-600">Loading...</p>}
+      {loading && <Spinner />}
       {error && <p className="text-red-600">{error}</p>}
 
       {!loading && !error && (

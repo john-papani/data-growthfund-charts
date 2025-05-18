@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import RangeDates from "@/app/Components/EpikiroseisChartComponents/RangeDates";
+import Spinner from "./Spinner";
 const EpikiroseisTable = () => {
   const [data, setData] = useState({});
   const [filteredData, setFilteredData] = useState([]);
@@ -13,7 +14,9 @@ const EpikiroseisTable = () => {
   const load = async () => {
     setLoading(true);
     try {
-      const response = await fetch( `${process.env.NEXT_PUBLIC_BASE_PATH}/csv_json/_epikiroseis_062023.json`);
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_BASE_PATH}/csv_json/_epikiroseis_062023.json`
+      );
       if (!response.ok) throw new Error("JSON not found");
       const json = await response.json();
       setData(json);
@@ -61,8 +64,11 @@ const EpikiroseisTable = () => {
 
   return (
     <div className="p-4 space-y-4">
-      <p className="text-3xl md:pt-0 pt-5 pb-5 font-bold text-center text-gray-800">
+      <p className="text-3xl md:pt-0 pt-5 font-bold text-center text-gray-800">
         Επικυρώσεις Ειστηρίων(2019 - 2023)
+      </p>
+      <p className="text-gray-600 pb-4 italic text-center">
+        Κανε κλικ σε μία γραμμή για να εστιάσεις.
       </p>
 
       {/* Filter */}
@@ -75,7 +81,7 @@ const EpikiroseisTable = () => {
       />
 
       {/* Table */}
-      {loading && <p className="text-gray-600">Loading...</p>}
+      {loading && <Spinner />}
       {error && <p className="text-red-600">{error}</p>}
 
       {!loading && !error && (

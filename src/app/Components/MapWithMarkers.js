@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
+import Spinner from "./Spinner";
 
 // Fix for default Leaflet marker icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -126,10 +127,9 @@ const MapWithMarkers = () => {
             </label>
           ))}
         </div>
-
         <div className="w-full md:w-[85%] h-[65vh] md:h-[75vh] rounded-xl shadow-md">
           {loading ? (
-            <p className="text-center">Loading map...</p>
+            <Spinner />
           ) : error ? (
             <p className="text-center text-red-500">{error}</p>
           ) : (

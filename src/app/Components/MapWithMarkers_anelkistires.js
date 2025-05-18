@@ -5,6 +5,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
+import Spinner from "./Spinner";
 // Fix for default Leaflet marker icons
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -68,7 +69,7 @@ const MapWithMarkers = () => {
 
   const defaultCenter = [37.947, 23.643];
 
-  if (loading) return <p>Loading map...</p>;
+  if (loading) return <Spinner />;
   if (error) return <p>{error}</p>;
 
   return (
