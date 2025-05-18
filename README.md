@@ -4,53 +4,23 @@ This project is a web application that provides interactive data visualizations 
 
 ## Features
 
-- **Interactive Charts**: View data in the form of bar charts, line charts, and more.
-- **User-Friendly Interface**: Clean, responsive design for easy navigation and data exploration.
+* **Interactive Charts**: View data in the form of bar charts, line charts, and more.
+* **User-Friendly Interface**: Clean, responsive design for easy navigation and data exploration.
 
 ## Technologies Used
 
-- **Next.js**: A React-based framework for server-side rendering and static site generation.
-- **Tailwind CSS**: A utility-first CSS framework for styling the app.
-- **Recharts**: A charting library for rendering interactive data charts.
-- **Image Handling**: Utilizes Next.js's `<Image>` component for optimized image rendering.
+* **Next.js**: A React-based framework for server-side rendering and static site generation.
+* **Tailwind CSS**: A utility-first CSS framework for styling the app.
+* **Recharts**: A charting library for rendering interactive data charts.
 
-## How to Run Locally
+## Data Source
 
-### Prerequisites
+The data are sourced from [https://data.growthfund.gr/](https://data.growthfund.gr/).
 
-- Node.js
-- npm or yarn
+---
 
-### Installation
+## Note
 
-1. Clone this repository:
+This application was created as a personal project and uses publicly available data from official government sources. Its purpose is to present this data in a user-friendly and understandable way to the public.
 
-   ```bash
-   git clone <repository-url>
-   ```
-
-2. Install dependencies:
-
-   ```bash
-   npm install
-   # or
-   yarn install
-   ```
-
-3. Run the app locally:
-
-   ```bash
-   npm run dev
-   # or
-   yarn dev
-   ```
-
-4. Open your browser and go to [http://localhost:3000](http://localhost:3000).
-
-## Contributing
-
-Feel free to submit issues or pull requests if you want to improve the app.
-
-## License
-
-This project is open-source and available under the MIT License.
+The project is in an experimental stage and may contain errors or inaccuracies. If you have any questions or suggestions, feel free to contact me via \[insert your preferred contact method here].
