@@ -22,9 +22,9 @@ function Navbar() {
       <div className="flex justify-between items-center">
         <p
           onClick={() => navigate("/")}
-          className="text-3xl font-bold text-gray-800 hover:text-blue-600 cursor-pointer transition"
+          className="text-2xl italic font-bold text-gray-800 hover:text-blue-600 cursor-pointer transition"
         >
-          HCAP Statistics
+          Open Data Hub Charts
         </p>
 
         {/* Hamburger Button (visible on small screens only) */}
