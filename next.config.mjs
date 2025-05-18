@@ -9,6 +9,9 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  env: {
+    NEXT_PUBLIC_BASE_PATH: isProd ? "/hcapdata-charts" : "",
+  },
 };
 
 export default nextConfig;
