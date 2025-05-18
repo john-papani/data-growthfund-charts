@@ -1,8 +1,8 @@
 {
-  "name": "hcapdata-charts",
+  "name": "data-growthfund-charts",
   "description": "A collection of charts for HCAP data visualization.",
   "author": "Ioannis Papanikolaou",
-  "homepage": "https://john-papani.github.io/hcapdata-charts/",
+  "homepage": "https://john-papani.github.io/data-growthfund-charts/",
   "version": "0.1.0",
   "private": true,
   "scripts": {
