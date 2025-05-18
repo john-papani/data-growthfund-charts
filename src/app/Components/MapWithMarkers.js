@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import axios from "axios";
 
 // Fix for default Leaflet marker icons
 delete L.Icon.Default.prototype._getIconUrl;
@@ -56,9 +57,11 @@ const MapWithMarkers = () => {
     const load = async () => {
       setLoading(true);
       try {
-        const res = await fetch( `${process.env.NEXT_PUBLIC_BASE_PATH}/csv_json/diktyo_polisis_active.json`);
-        if (!res.ok) throw new Error("Failed to fetch data");
-        const json = await res.json();
+        const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+        const res = await axios.get(
+          `${basePath}/csv_json/diktyo_polisis_active.json`
+        );
+        const json = res.data;
         const cleaned = json.map((entry) => ({
           X: entry.X,
           Y: entry.Y,
@@ -70,11 +73,12 @@ const MapWithMarkers = () => {
         setFilteredData(cleaned);
       } catch (err) {
         setError("Failed to load map data.");
-        console.error(err);
+        console.error("Error loading map data:", err);
       } finally {
         setLoading(false);
       }
     };
+
     load();
   }, []);
 

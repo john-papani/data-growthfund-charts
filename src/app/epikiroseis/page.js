@@ -12,7 +12,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { useRouter } from "next/navigation";
-
+import axios from "axios";
 import RangeDates from "@/app/Components/EpikiroseisChartComponents/RangeDates";
 
 const EpikiroseisCharts = () => {
@@ -39,9 +39,11 @@ const EpikiroseisCharts = () => {
   const load = async () => {
     setLoading(true);
     try {
-      const response = await fetch( `${process.env.NEXT_PUBLIC_BASE_PATH}./csv_json/_epikiroseis_062023.json`);
-      if (!response.ok) throw new Error("JSON not found");
-      const json = await response.json();
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+      const response = await axios.get(
+        `${basePath}/csv_json/_epikiroseis_062023.json`
+      );
+      const json = response.data;
       const entries = sortByDate(Object.entries(json));
 
       const start = new Date(startDate);
@@ -56,7 +58,7 @@ const EpikiroseisCharts = () => {
       setFilteredData(filtered);
     } catch (err) {
       setError("Failed to load data.");
-      console.error(err);
+      console.error("Error fetching JSON:", err);
     } finally {
       setLoading(false);
     }

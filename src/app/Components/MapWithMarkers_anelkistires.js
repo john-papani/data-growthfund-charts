@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-
+import axios from "axios";
 // Fix for default Leaflet marker icons
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -38,10 +38,11 @@ const MapWithMarkers = () => {
     setError(null);
 
     try {
-      const response = await fetch( `${process.env.NEXT_PUBLIC_BASE_PATH}/csv_json/dieythinseis_anelkistires.json`);
-      if (!response.ok) throw new Error("JSON not found");
-
-      const json = await response.json();
+      const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+      const response = await axios.get(
+        `${basePath}/csv_json/dieythinseis_anelkistires.json`
+      );
+      const json = response.data;
 
       const cleanedEntries = json.map((entry) => ({
         latitude: parseFloat(entry.Latitude),
@@ -55,7 +56,7 @@ const MapWithMarkers = () => {
       setFilteredData(cleanedEntries);
     } catch (err) {
       setError("Failed to load data.");
-      console.error(err);
+      console.error("Error loading elevator directions data:", err);
     } finally {
       setLoading(false);
     }
@@ -73,11 +74,13 @@ const MapWithMarkers = () => {
   return (
     <div>
       <div className="flex flex-col items-center justify-center w-full md:w-[85%] mx-auto mb-4">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">Δίκτυο Ανελκυστήρων</h1>
+        <h1 className="text-2xl font-bold text-gray-800 mb-4">
+          Δίκτυο Ανελκυστήρων
+        </h1>
         <p className="text-gray-600 mb-4 text-center w-[90%] md:w-[70%]">
-          Το δίκτυο ανελκυστήρων της Αττικής είναι ένα από τα πιο εκτενή και
-          σύγχρονα δίκτυα στην Ευρώπη. Αποτελείται από 20 σταθμούς και 40
-          ανελκυστήρες, οι οποίοι εξυπηρετούν καθημερινά χιλιάδες επιβάτες.
+          Χάρτης με τις θέσεις των ανελκυστήρων σε όλους τους σταθμούς ΗΣΑΠ.
+          <br />
+          Κάντε κλικ σε κάθε σημείο για περισσότερες πληροφορίες.
         </p>
       </div>
 
